@@ -6,9 +6,9 @@ local function DisableRepair(self, event)
     --check if vendor is a repairer
     if(CanMerchantRepair()) then
         local repairAllCost, canRepair = GetRepairAllCost();
-        DEFAULT_CHAT_FRAME:AddMessage('Mom: It costs HOW MUCH to repair your gear? '..GetCoinTextureString(repairAllCost))
-        DEFAULT_CHAT_FRAME:AddMessage('Mom: We can repair at home. Lets go.')
         CloseMerchant()
+        DEFAULT_CHAT_FRAME:AddMessage('(NoRepair) Mom: It costs HOW MUCH to repair your gear? '..GetCoinTextureString(repairAllCost))
+        DEFAULT_CHAT_FRAME:AddMessage('(NoRepair) Mom: We can repair at home. Lets go.')
     end
 end
 
