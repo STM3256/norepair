@@ -1,7 +1,7 @@
 # NoRepair
 
 ## WOW Game version
-Classic (era/SOM). There are other versions of this addon.
+Classic (bcc Burning Crusade Classic). There are other versions of this addon.
 
 ## Summary
 This is an Addon for SOM wow to disable repairing for the ephemeral achievement in classic hard core. See www.classichc.net for details on the achievement.
