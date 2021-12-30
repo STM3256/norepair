@@ -1,0 +1,4 @@
+1. Autosell any gear that has zero durability
+2. auto on by default, but allow per character to turn off merchant close
+3. Some kind of text interface selling
+4. large quantities can loop through and buy

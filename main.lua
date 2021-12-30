@@ -111,3 +111,11 @@ end
 local event = CreateFrame("Frame")
 event:SetScript("OnEvent", BuyItemsViaOrder);
 event:RegisterEvent("MERCHANT_SHOW")
+
+local function printHello (self, event)
+    print('NoRepair loaded - Gear is now one time use!')
+end
+
+local login = CreateFrame("Frame")
+login:SetScript("OnEvent", printHello);
+login:RegisterEvent("PLAYER_LOGIN")
