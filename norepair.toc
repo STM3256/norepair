@@ -1,6 +1,6 @@
 ## Interface: 20502
 ## Title: No Repair
 ## Author: cheappurplesuit
-## Version: 2.1
+## Version: 2.2
 
 main.lua
