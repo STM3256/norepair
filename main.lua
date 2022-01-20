@@ -102,7 +102,7 @@ local function BuyItemsViaOrder(self, event)
             local numItems = GetMerchantNumItems();
             print('NoRepair: This vendor sells the following items. ')
             print('| I:Index | N:Name | P:Price | S:Stack_Size |')
-            for i= 1, merchantItemMax do
+            for i= 1, numItems do
                 local name, texture, price, quantity, numAvailable, isPurchasable = GetMerchantItemInfo(i);
                 if isPurchasable == 'true' and numAvailable > 0 then
                     print('| I:'..i..' | N:'..name..' | P:'..GetCoinTextureString(price)..' | S:'..quantity..' |')
