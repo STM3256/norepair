@@ -3,7 +3,7 @@
 -- https://wowwiki-archive.fandom.com/wiki/Events_A-Z_(full_list)
 -- https://wowpedia.fandom.com/wiki/UI_escape_sequences
 
-local BuyItemName, BuyItemQuantity, IsBuying = '', 0, false
+local BuyItemIndex, BuyItemQuantity, IsBuying = 0, 0, false
 
 local function DisplayError(errormessage)
     print('\124cFFFF0000NoRepair ERROR - '..errormessage)
@@ -30,44 +30,33 @@ end
 
 SLASH_NOREPAIRBUY1, SLASH_NOREPAIRBUY2 = '/nrb', '/norepairbuy';
 function SlashCmdList.NOREPAIRBUY(msg, editBox)
-    local itemname, quantity = msg:match("^(%S*)%s+(%d+)$")
-    if quantity ~= "" and itemname ~= "" then
+    local itemIndex, quantity = msg:match("^(%d+)%s+(%d+)%s*$")
+    if  itemIndex ~= "" and quantity ~= "" then
         if tonumber(quantity) > 0 and tonumber(quantity) < 11 then
-            IsBuying = true
-            if itemname == "wflux" then
-                BuyItemName, BuyItemQuantity = 'Weak Flux', tonumber(quantity)
-            elseif itemname == "sflux" then
-                BuyItemName, BuyItemQuantity = 'Strong Flux', tonumber(quantity)
-            elseif itemname == "coal" then
-                BuyItemName, BuyItemQuantity = 'Coal', tonumber(quantity)
-            elseif itemname == "eflux" then
-                BuyItemName, BuyItemQuantity = 'Elemental Flux', tonumber(quantity)
-            elseif itemname == "hammer" then
-                BuyItemName, BuyItemQuantity = 'Blacksmith Hammer', tonumber(quantity)
-            elseif itemname == "pick" then
-                BuyItemName, BuyItemQuantity = 'Mining Pick', tonumber(quantity)
+            if tonumber(itemIndex) > 0 then
+                IsBuying = true
+                BuyItemIndex, BuyItemQuantity = itemIndex, tonumber(quantity)
             else
-                IsBuying = false
-                DisplayError('item name did not match expected values');
+                DisplayError("Index must be greater than zero (1 based index)");
             end
         else
-            DisplayError("quantity did not match expected values");
+            DisplayError("Quantity did not match expected values (1 to 10)");
         end
     else
-        DisplayError('item name or quantity was empty');
+        DisplayError('item index or quantity was empty');
     end
-    print('\124cFFeb8034NoRepair Help \124rbuying item:'..BuyItemName..' with quantity: '..BuyItemQuantity)
+    print('\124cFFeb8034NoRepair Help \124rbuying item:'..BuyItemIndex..' with quantity: '..BuyItemQuantity)
 end
 
 SLASH_NOREPAIRBUYORDER1, SLASH_NOREPAIRBUYORDER2 = '/nrbo', '/norepairbuyorder';
 function SlashCmdList.NOREPAIRBUYORDER(msg, editBox)
-    print('(NoRepair) Order Check:'..tostring(IsBuying)..' buying item:'..BuyItemName..' with quantity: '..tostring(BuyItemQuantity))
+    print('(NoRepair) Order Check:'..tostring(IsBuying)..' buying item index:'..BuyItemIndex..' with quantity: '..tostring(BuyItemQuantity))
 end
 
 SLASH_NOREPAIRBUYORDERCANCEL1, SLASH_NOREPAIRBUYORDERCANCEL2 = '/nrbc', '/norepairbuycancel';
 function SlashCmdList.NOREPAIRBUYORDERCANCEL(msg, editBox)
     print('(NoRepair) Cancelling order!')
-    BuyItemName, BuyItemQuantity, IsBuying = '', 0, false
+    BuyItemIndex, BuyItemQuantity, IsBuying = '', 0, false
 end
 
 local function BuyItemsViaOrder(self, event)
@@ -75,29 +64,13 @@ local function BuyItemsViaOrder(self, event)
         if(IsBuying) then
             --execute check do they have it?
             local merchantItemMax = GetMerchantNumItems()
-            local saveindex = 0
-            for i= 1, merchantItemMax do
-                saveindex = i
-                local name, texture, price, quantity, numAvailable, isPurchasable = GetMerchantItemInfo(i);
-                if name == BuyItemName then
-                    --attempt buy
-                    if tostring(isPurchasable) == 'true' then
-                        BuyMerchantItem(i, tonumber(BuyItemQuantity))
-                        CloseMerchant()
-                        print('(NoRepair) Order fufilled!')
-                        break
-                    else
-                        print('Found it but it was unavailable for purchase')
-                    end
-                else
-                    --print(name..' did not match '..BuyItemName)
-                end
+            if BuyItemIndex <= merchantItemMax then
+                BuyMerchantItem(BuyItemIndex, tonumber(BuyItemQuantity))
+            else
+                print('\124rERROR That index is too high! cancelling order')
             end
             CloseMerchant()
-            if merchantItemMax == saveindex then
-                print('\124cFFFF0000NoRepair \124rERROR Item not found, cancelling order')
-            end
-            BuyItemName, BuyItemQuantity, IsBuying = '', 0, false
+            BuyItemIndex, BuyItemQuantity, IsBuying = '', 0, false
         else
             local numItems = GetMerchantNumItems();
             print('NoRepair: This vendor sells the following items. ')
