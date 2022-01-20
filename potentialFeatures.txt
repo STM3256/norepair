@@ -1,4 +1,34 @@
-1. Autosell any gear that has zero durability
 2. auto on by default, but allow per character to turn off merchant close
 3. Some kind of text interface selling
 4. large quantities can loop through and buy
+
+5. remake addon entirely
+focus on buy orders
+option to auto close merchants for purchase/selling
+option for repair vendors
+with exact match
+5.aa fuzzy match ('weak fl', 'eak' and 'k flux' will match 'weak flux')
+5.a add gui
+5.b add every vendor-searchable and "buy" from their gui menu (requires item and vendor database)
+5.c calculate order's total cost (requires item database)
+
+commands
+/curbside and /curb with first argument '', 'help', 'h' all display main help
+/curb help buy - explain buy command
+/curb help order - explain review
+/curb help cancel - explain cancelling order
+/curb help pickup - explain vendor windows staying open/auto closing
+/curb buy/add <number of stacks or quantity?> <item name or index of next vendor>
+/curb order - reviews current buy order
+/curb cancel - clears entire buy order
+/curb pickup allvendor/repairvendor/allmerchant/repairmerchant true/false (persist after logout per character - display current settings after set)
+/curb pickup - display current settings
+/curb autosell gray/grey/broken/
+/curb 
+
+behavior
+clicking a vendor that sells things WITH list - auto buys all it can, warns user things not found and keeps on order list (logout or command clears list)
+clicking a vendor that sells things WITHOUT list - print out inventory
+Any index buys that fail on next buy attempt will be lost
+
+6. ability to sell to vendors

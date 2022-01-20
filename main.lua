@@ -95,15 +95,23 @@ local function BuyItemsViaOrder(self, event)
             end
             CloseMerchant()
             if merchantItemMax == saveindex then
-                print('\124cFFFF0000NoRepair 124rERROR Item not found, cancelling order')
+                print('\124cFFFF0000NoRepair \124rERROR Item not found, cancelling order')
             end
             BuyItemName, BuyItemQuantity, IsBuying = '', 0, false
         else
-            local repairAllCost, canRepair = GetRepairAllCost();
+            local numItems = GetMerchantNumItems();
+            print('NoRepair: This vendor sells the following items. ')
+            print('| I:Index | N:Name | P:Price | S:Stack_Size |')
+            for i= 1, merchantItemMax do
+                local name, texture, price, quantity, numAvailable, isPurchasable = GetMerchantItemInfo(i);
+                if isPurchasable == 'true' and numAvailable > 0 then
+                    print('| I:'..i..' | N:'..name..' | P:'..GetCoinTextureString(price)..' | S:'..quantity..' |')
+                else
+                    print('| I:'..i..' | N:'..name..' | \124rUnavailable for Purchase |')
+                end
+            end
             CloseMerchant()
-            print('(NoRepair) Mom: It costs HOW MUCH to repair your gear? '..GetCoinTextureString(repairAllCost))
-            print('(NoRepair) Mom: We can repair at home. Lets go.')
-            print('(NoRepair if you want to place an order use \124cFFeb8034/nrb\124r )')
+            print('NoRepair: Make a buy order using /nrb or /norepairbuy with the index and quantity');
         end
     end
 end
