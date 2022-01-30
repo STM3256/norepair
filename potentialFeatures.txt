@@ -1,3 +1,5 @@
+0. Recreate error where only partial list shows and window does not get closed.
+1. if user can't afford, close merchant window and display error
 2. auto on by default, but allow per character to turn off merchant close
 3. Some kind of text interface selling
 4. large quantities can loop through and buy
