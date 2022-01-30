@@ -3,6 +3,7 @@
 -- https://wowwiki-archive.fandom.com/wiki/Events_A-Z_(full_list)
 -- https://wowpedia.fandom.com/wiki/UI_escape_sequences
 
+local version = '2.3.classictest'
 local BuyItemIndex, BuyItemQuantity, IsBuying = 0, 0, false
 
 local function DisplayError(errormessage)
@@ -94,7 +95,7 @@ event:SetScript("OnEvent", BuyItemsViaOrder);
 event:RegisterEvent("MERCHANT_SHOW")
 
 local function printHello (self, event)
-    print('NoRepair loaded - Gear is now one time use!')
+    print('NoRepair '..version..' loaded - Gear is now one time use!')
 end
 
 local login = CreateFrame("Frame")
