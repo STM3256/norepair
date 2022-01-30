@@ -4,6 +4,7 @@
 -- https://wowpedia.fandom.com/wiki/UI_escape_sequences
 
 local version = '2.3.classictest'
+local maxCharactersInItemName = 25
 local BuyItemIndex, BuyItemQuantity, IsBuying = 0, 0, false
 
 local function DisplayError(errormessage)
@@ -75,15 +76,22 @@ local function BuyItemsViaOrder(self, event)
         else
             local numItems = GetMerchantNumItems();
             print('NoRepair: This vendor sells the following items. '..numItems)
-            print('| I:Index | N:Name | P:Price | S:Stack_Size |')
+            print('| Index |           Name            | Price | Stack_Size |')
             for i = 1, numItems do
-                print(i)
-                local name, texture, price, quantity, numAvailable, isPurchasable = GetMerchantItemInfo(i);
-                print('DEBUG | I:'..i..' | N:'..name..' | Texture:'..texture..' | P:'..GetCoinTextureString(price)..' | S:'..quantity..' | Number:'..numAvailable..' | Purchase?:'..isPurchasable)
-                if isPurchasable == 'true' and numAvailable > 0 then
-                    print('| I:'..i..' | N:'..name..' | P:'..GetCoinTextureString(price)..' | S:'..quantity..' |')
+            --/script print(GetMerchantItemInfo(1) end
+            --/script name, texture, price, stackSize, numAvailable, isPurchasable, isUsable = GetMerchantItemInfo(11); print(isPurchasable)
+                --print(i)
+                local name, texture, price, stackSize, numAvailable, isPurchasable, isUsable = GetMerchantItemInfo(i); --extendedCost, currencyID not using
+                local numberSpaceToAdd = 25 - string.len(name)
+                local nameSpaceBuffer = string.rep(' ', numberSpaceToAdd)
+                if isPurchasable == true and numAvailable ~= 0 then
+                    print('| '..i..' | '..name..nameSpaceBuffer..' | '..GetCoinTextureString(price)..' | '..stackSize..' |')
                 else
-                    print('| I:'..i..' | N:'..name..' | \124rUnavailable for Purchase |')
+                    local available = ''
+                    if numAvailable == 0 then
+                        available = ' .. None Left'
+                    end
+                    print('| '..i..' | '..name..nameSpaceBuffer..' | '..GetCoinTextureString(price)..' | \124cFFFF0000Unavailable for Purchase'..available..' |')
                 end
             end
             CloseMerchant()
